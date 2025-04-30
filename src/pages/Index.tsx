@@ -1,12 +1,22 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { useState } from "react";
+import ScannerInterface from "@/components/ScannerInterface";
+import FlashOverlay from "@/components/FlashOverlay";
 
 const Index = () => {
+  const [showFlash, setShowFlash] = useState(false);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div className="relative min-h-screen bg-black">
+      {/* Show flash animation overlay when flash is triggered */}
+      {showFlash && <FlashOverlay onComplete={() => setShowFlash(false)} />}
+      
+      <ScannerInterface 
+        onFlashToggle={() => setShowFlash(true)} 
+        uploadedImage={uploadedImage}
+        onImageUpload={setUploadedImage}
+      />
     </div>
   );
 };
