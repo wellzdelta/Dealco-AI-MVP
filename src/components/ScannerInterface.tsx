@@ -2,7 +2,7 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Photo, FlashLight, History, Person, Camera } from "lucide-react";
+import { Image, Flashlight, History, User, Camera } from "lucide-react";
 
 interface ScannerInterfaceProps {
   onFlashToggle: () => void;
@@ -64,7 +64,7 @@ const ScannerInterface = ({
           className="bg-white/20 hover:bg-white/30 text-white rounded-full"
           onClick={() => navigate("/profile")}
         >
-          <Person className="h-5 w-5" />
+          <User className="h-5 w-5" />
         </Button>
       </div>
 
@@ -98,7 +98,7 @@ const ScannerInterface = ({
           onClick={handleGalleryClick}
           className="w-14 h-14 flex items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-blue-500 text-white shadow-lg hover:opacity-90 transition-all"
         >
-          <Photo className="h-6 w-6" />
+          <Image className="h-6 w-6" />
         </button>
         
         {/* Hidden file input */}
@@ -124,7 +124,7 @@ const ScannerInterface = ({
           onClick={onFlashToggle}
           className="w-14 h-14 flex items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-blue-500 text-white shadow-lg hover:opacity-90 transition-all"
         >
-          <FlashLight className="h-6 w-6" />
+          <Flashlight className="h-6 w-6" />
         </button>
       </div>
     </div>
