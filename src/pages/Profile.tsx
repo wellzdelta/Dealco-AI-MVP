@@ -1,44 +1,84 @@
 
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, User } from "lucide-react";
+import { Headphones, Sparkles } from "lucide-react";
+import { CurvedHeader } from "@/components/ui/curved-header";
+import { FooterNav } from "@/components/ui/footer-nav";
+import { ActionCard } from "@/components/ui/action-card";
+import { SettingsItem } from "@/components/ui/settings-item";
 
 const Profile = () => {
   const navigate = useNavigate();
-  
+
+  const handleSupportClick = () => {
+    console.log("Chat with Support clicked");
+    // Navigate to support page
+  };
+
+  const handleFeatureRequestClick = () => {
+    console.log("Request Feature clicked");
+    // Navigate to feature request page
+  };
+
+  const handleHistoryClick = () => {
+    navigate("/history");
+  };
+
+  const handleLanguageClick = () => {
+    console.log("Language clicked");
+    // Navigate to language selection
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="p-4 bg-white shadow-md">
-        <div className="flex items-center">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={() => navigate("/")}
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <h1 className="text-xl font-bold ml-2">Profile</h1>
+    <div className="min-h-screen bg-surface-alt">
+      {/* Header */}
+      <CurvedHeader
+        title="Profile"
+        subtitle="Welcome back , Ahmed"
+      />
+
+      {/* Content */}
+      <div className="px-6 pt-6 pb-32">
+        {/* Action Cards */}
+        <div className="space-y-4 mb-8">
+          <ActionCard
+            title="Chat with Support"
+            subtitle="Get help from our team"
+            icon={Headphones}
+            variant="support"
+            onClick={handleSupportClick}
+          />
+          
+          <ActionCard
+            title="Request Feature"
+            subtitle="Suggest new features"
+            icon={Sparkles}
+            variant="feature"
+            onClick={handleFeatureRequestClick}
+          />
         </div>
-      </div>
-      
-      <div className="flex flex-col items-center py-8 px-4">
-        <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center">
-          <User className="h-10 w-10 text-gray-400" />
-        </div>
-        <h2 className="text-xl font-semibold mt-4">User Name</h2>
-        <p className="text-gray-500">user@example.com</p>
-        
-        <div className="w-full max-w-md mt-8">
-          <div className="bg-white rounded-lg shadow-sm p-4 mb-4 flex justify-between items-center">
-            <span>Storage Used</span>
-            <span className="text-blue-600">0 MB</span>
+
+        {/* Settings Section */}
+        <div className="bg-surface-card rounded-2xl shadow-lg overflow-hidden">
+          <div className="p-4 border-b border-border">
+            <h2 className="text-text-primary font-semibold text-lg">Settings</h2>
           </div>
           
-          <div className="bg-white rounded-lg shadow-sm p-4 mb-4 flex justify-between items-center">
-            <span>Total Scans</span>
-            <span className="text-blue-600">0</span>
-          </div>
+          <SettingsItem
+            label="History"
+            onClick={handleHistoryClick}
+          />
+          
+          <SettingsItem
+            label="Language"
+            onClick={handleLanguageClick}
+          />
         </div>
+      </div>
+
+      {/* Bottom Navigation */}
+      <div className="fixed bottom-0 left-0 right-0">
+        <FooterNav />
       </div>
     </div>
   );

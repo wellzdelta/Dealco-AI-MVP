@@ -20,6 +20,22 @@ export default {
 		},
 		extend: {
 			colors: {
+				/* Brand Colors */
+				'brand-green': 'hsl(var(--brand-green))',
+				'brand-blue': 'hsl(var(--brand-blue))',
+				'brand-navy': 'hsl(var(--brand-navy))',
+				
+				/* UI Colors */
+				'ui-white': 'hsl(var(--ui-white))',
+				'ui-black': 'hsl(var(--ui-black))',
+				'text-primary': 'hsl(var(--text-primary))',
+				'text-secondary': 'hsl(var(--text-secondary))',
+				'text-inverse': 'hsl(var(--text-inverse))',
+				'surface-card': 'hsl(var(--surface-card))',
+				'surface-alt': 'hsl(var(--surface-alt))',
+				'link-blue': 'hsl(var(--link-blue))',
+				
+				/* Semantic Tokens */
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
