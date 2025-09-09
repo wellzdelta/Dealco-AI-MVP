@@ -1,14 +1,18 @@
 
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Headphones, Sparkles } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { Headphones, Sparkles, Languages } from "lucide-react";
 import { CurvedHeader } from "@/components/ui/curved-header";
 import { FooterNav } from "@/components/ui/footer-nav";
 import { ActionCard } from "@/components/ui/action-card";
 import { SettingsItem } from "@/components/ui/settings-item";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Profile = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { currentLanguage, toggleLanguage } = useLanguage();
 
   const handleSupportClick = () => {
     console.log("Chat with Support clicked");
@@ -25,16 +29,15 @@ const Profile = () => {
   };
 
   const handleLanguageClick = () => {
-    console.log("Language clicked");
-    // Navigate to language selection
+    toggleLanguage();
   };
 
   return (
     <div className="min-h-screen bg-surface-alt">
       {/* Header */}
       <CurvedHeader
-        title="Profile"
-        subtitle="Welcome back , Ahmed"
+        title={t('profile')}
+        subtitle={t('welcomeBack', { name: 'Ahmed' })}
       />
 
       {/* Content */}
@@ -42,16 +45,16 @@ const Profile = () => {
         {/* Action Cards */}
         <div className="space-y-4 mb-8">
           <ActionCard
-            title="Chat with Support"
-            subtitle="Get help from our team"
+            title={t('chatWithSupport')}
+            subtitle={t('getHelpFromTeam')}
             icon={Headphones}
             variant="support"
             onClick={handleSupportClick}
           />
           
           <ActionCard
-            title="Request Feature"
-            subtitle="Suggest new features"
+            title={t('requestFeature')}
+            subtitle={t('suggestNewFeatures')}
             icon={Sparkles}
             variant="feature"
             onClick={handleFeatureRequestClick}
@@ -61,17 +64,18 @@ const Profile = () => {
         {/* Settings Section */}
         <div className="bg-surface-card rounded-2xl shadow-lg overflow-hidden">
           <div className="p-4 border-b border-border">
-            <h2 className="text-text-primary font-semibold text-lg">Settings</h2>
+            <h2 className="text-text-primary font-semibold text-lg">{t('settings')}</h2>
           </div>
           
           <SettingsItem
-            label="History"
+            label={t('history')}
             onClick={handleHistoryClick}
           />
           
           <SettingsItem
-            label="Language"
+            label={`${t('language')} (${currentLanguage === 'en' ? 'English' : 'العربية'})`}
             onClick={handleLanguageClick}
+            icon={Languages}
           />
         </div>
       </div>
