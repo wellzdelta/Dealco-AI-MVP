@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dealco AI Backend Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .endpoint {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .endpoint h3 {
+            margin: 0 0 10px 0;
+            color: #555;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .response {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .success {
+            border-left: 4px solid #28a745;
+        }
+        .error {
+            border-left: 4px solid #dc3545;
+        }
+        .status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Dealco AI Backend Test</h1>
+        <p style="text-align: center; color: #666;">
+            Test the Dealco AI backend endpoints directly from your browser
+        </p>
+
+        <div class="endpoint">
+            <h3>Health Check <span id="health-status" class="status"></span></h3>
+            <button onclick="testHealth()">Test Health</button>
+            <div id="health-response" class="response" style="display: none;"></div>
+        </div>
+
+        <div class="endpoint">
+            <h3>Authentication</h3>
+            <button onclick="testLogin()">Test Login</button>
+            <button onclick="testRegister()">Test Register</button>
+            <div id="auth-response" class="response" style="display: none;"></div>
+        </div>
+
+        <div class="endpoint">
+            <h3>Products</h3>
+            <button onclick="testProducts()">Get Products</button>
+            <button onclick="testSearch()">Search Products</button>
+            <div id="products-response" class="response" style="display: none;"></div>
+        </div>
+
+        <div class="endpoint">
+            <h3>Scans</h3>
+            <button onclick="testCreateScan()">Create Scan</button>
+            <button onclick="testGetScans()">Get Scans</button>
+            <div id="scans-response" class="response" style="display: none;"></div>
+        </div>
+
+        <div class="endpoint">
+            <h3>Prices</h3>
+            <button onclick="testPrices()">Get Product Prices</button>
+            <div id="prices-response" class="response" style="display: none;"></div>
+        </div>
+
+        <div class="endpoint">
+            <h3>Image Recognition</h3>
+            <button onclick="testImageRecognition()">Recognize Image</button>
+            <div id="image-response" class="response" style="display: none;"></div>
+        </div>
+
+        <div class="endpoint">
+            <h3>Run All Tests</h3>
+            <button onclick="runAllTests()" style="background: #28a745;">Run All Tests</button>
+            <div id="all-tests-response" class="response" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const BASE_URL = 'http://localhost:3001/api/v1';
+
+        async function makeRequest(method, endpoint, data = null) {
+            try {
+                const config = {
+                    method,
+                    url: `${BASE_URL}${endpoint}`,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                };
+                
+                if (data) {
+                    config.data = data;
+                }
+                
+                const response = await fetch(`${BASE_URL}${endpoint}`, {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: data ? JSON.stringify(data) : undefined,
+                });
+                
+                const result = await response.json();
+                return { success: true, data: result, status: response.status };
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+
+        function displayResponse(elementId, result, statusElementId = null) {
+            const element = document.getElementById(elementId);
+            const statusElement = statusElementId ? document.getElementById(statusElementId) : null;
+            
+            element.style.display = 'block';
+            element.className = 'response ' + (result.success ? 'success' : 'error');
+            
+            if (result.success) {
+                element.textContent = `Status: ${result.status}\n\n${JSON.stringify(result.data, null, 2)}`;
+                if (statusElement) {
+                    statusElement.textContent = 'SUCCESS';
+                    statusElement.className = 'status success';
+                }
+            } else {
+                element.textContent = `Error: ${result.error}`;
+                if (statusElement) {
+                    statusElement.textContent = 'ERROR';
+                    statusElement.className = 'status error';
+                }
+            }
+        }
+
+        async function testHealth() {
+            const result = await makeRequest('GET', '/health');
+            displayResponse('health-response', result, 'health-status');
+        }
+
+        async function testLogin() {
+            const result = await makeRequest('POST', '/auth/login', {
+                email: 'test@example.com',
+                password: 'password'
+            });
+            displayResponse('auth-response', result);
+        }
+
+        async function testRegister() {
+            const result = await makeRequest('POST', '/auth/register', {
+                email: 'newuser@example.com',
+                password: 'password',
+                firstName: 'New',
+                lastName: 'User'
+            });
+            displayResponse('auth-response', result);
+        }
+
+        async function testProducts() {
+            const result = await makeRequest('GET', '/products');
+            displayResponse('products-response', result);
+        }
+
+        async function testSearch() {
+            const result = await makeRequest('GET', '/products/search?q=nike&page=1&limit=10');
+            displayResponse('products-response', result);
+        }
+
+        async function testCreateScan() {
+            const result = await makeRequest('POST', '/scans', {
+                imageUrl: 'https://example.com/test.jpg'
+            });
+            displayResponse('scans-response', result);
+        }
+
+        async function testGetScans() {
+            const result = await makeRequest('GET', '/scans');
+            displayResponse('scans-response', result);
+        }
+
+        async function testPrices() {
+            const result = await makeRequest('GET', '/prices/product/product-1');
+            displayResponse('prices-response', result);
+        }
+
+        async function testImageRecognition() {
+            const result = await makeRequest('POST', '/image-recognition/recognize', {
+                imageUrl: 'https://example.com/test.jpg'
+            });
+            displayResponse('image-response', result);
+        }
+
+        async function runAllTests() {
+            const element = document.getElementById('all-tests-response');
+            element.style.display = 'block';
+            element.className = 'response';
+            element.textContent = 'Running all tests...\n\n';
+
+            const tests = [
+                { name: 'Health Check', fn: () => makeRequest('GET', '/health') },
+                { name: 'Login', fn: () => makeRequest('POST', '/auth/login', { email: 'test@example.com', password: 'password' }) },
+                { name: 'Register', fn: () => makeRequest('POST', '/auth/register', { email: 'newuser@example.com', password: 'password', firstName: 'New', lastName: 'User' }) },
+                { name: 'Get Products', fn: () => makeRequest('GET', '/products') },
+                { name: 'Search Products', fn: () => makeRequest('GET', '/products/search?q=nike&page=1&limit=10') },
+                { name: 'Create Scan', fn: () => makeRequest('POST', '/scans', { imageUrl: 'https://example.com/test.jpg' }) },
+                { name: 'Get Scans', fn: () => makeRequest('GET', '/scans') },
+                { name: 'Get Prices', fn: () => makeRequest('GET', '/prices/product/product-1') },
+                { name: 'Image Recognition', fn: () => makeRequest('POST', '/image-recognition/recognize', { imageUrl: 'https://example.com/test.jpg' }) },
+            ];
+
+            let passed = 0;
+            let total = tests.length;
+            let results = '';
+
+            for (const test of tests) {
+                try {
+                    const result = await test.fn();
+                    if (result.success) {
+                        passed++;
+                        results += `✅ ${test.name}: SUCCESS (${result.status})\n`;
+                    } else {
+                        results += `❌ ${test.name}: FAILED - ${result.error}\n`;
+                    }
+                } catch (error) {
+                    results += `❌ ${test.name}: ERROR - ${error.message}\n`;
+                }
+            }
+
+            results += `\n📊 Results: ${passed}/${total} tests passed\n`;
+            
+            if (passed === total) {
+                results += '🎉 All tests passed! Backend is working correctly.';
+                element.className = 'response success';
+            } else {
+                results += '⚠️ Some tests failed. Please check the backend.';
+                element.className = 'response error';
+            }
+
+            element.textContent = results;
+        }
+
+        // Auto-test health on page load
+        window.onload = function() {
+            testHealth();
+        };
+    </script>
+</body>
+</html>
