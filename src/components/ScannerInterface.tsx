@@ -1,6 +1,7 @@
 
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Image, Flashlight, History, User, Camera } from "lucide-react";
 
@@ -16,6 +17,7 @@ const ScannerInterface = ({
   onImageUpload 
 }: ScannerInterfaceProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -79,7 +81,7 @@ const ScannerInterface = ({
             />
           ) : (
             <div className="w-full h-full bg-black/30 flex items-center justify-center">
-              <p className="text-white/70 text-sm">Position document in frame</p>
+              <p className="text-white/70 text-sm">{t('positionDocument')}</p>
             </div>
           )}
         </div>
